@@ -7,7 +7,7 @@ Initialer::initalizeProject(); //建立資料夾 doc/ html/ csv/
 $files = array_slice(scandir('html/'), 2);
 
 $rows = [];
-$rows[] = ['research_no', 'pattern001', 'pattern002', 'pattern003'];
+$rows[] = ['research_no', 'pattern001', 'pattern002', 'pattern003', 'pattern004'];
 foreach ($files as $filename) {
     $results = RelatedLaws::getRelatedLaws($filename);
     $dot_idx = strpos($filename, '.');

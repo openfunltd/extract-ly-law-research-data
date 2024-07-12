@@ -10,7 +10,8 @@ class RelatedLaws {
         $laws_str_001 = self::getByPattern001($dom);
         $laws_str_002 = self::getByPattern002($dom);
         $laws_str_003 = self::getByPattern003($dom);
-        return [$laws_str_001, $laws_str_002, $laws_str_003];
+        $laws_str_004 = self::getByPattern004($dom);
+        return [$laws_str_001, $laws_str_002, $laws_str_003, $laws_str_004];
     }
 
     private static function getByPattern001($dom)
@@ -38,7 +39,7 @@ class RelatedLaws {
         foreach ($dom->getElementsByTagName('p') as $p_tag) {
             $text = $p_tag->nodeValue;
             if (self::withKeywords($text, self::$keywords) !== false) {
-                $p_dom = $p_tag;            
+                $p_dom = $p_tag;
                 break;
             }
         }
@@ -71,6 +72,32 @@ class RelatedLaws {
             return '';
         }
         return $str;
+    }
+
+    private static function getByPattern004($dom)
+    {
+        foreach ($dom->getElementsByTagName('p') as $p_tag) {
+            $text = $p_tag->nodeValue;
+            if (self::withKeywords($text, self::$keywords) !== false) {
+                $p_dom = $p_tag;
+                break;
+            }
+        }
+        if (! isset($p_dom)) {
+            return '';
+        }
+        $sibling_p_dom = $p_dom->nextSibling->nextSibling;
+        $sibling_p_str = trim($sibling_p_dom->nodeValue);
+        if (self::withKeywords($sibling_p_str, self::$excluded_keywords)) {
+            $str = $p_dom->nodeValue;
+            $str = preg_replace('/：/', ':', $str);
+            $str_array = explode(':', $str);
+            if (count($str_array) < 2) {
+                return '';
+            }
+            return trim($str_array[1]);
+        }
+        return '';
     }
 
     private static function withKeywords($text, $keywords)
