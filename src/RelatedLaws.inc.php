@@ -18,7 +18,7 @@ class RelatedLaws {
     {
         foreach ($dom->getElementsByTagName('b') as $b_tag) {
             $text = $b_tag->nodeValue;
-            if (mb_strpos($text, '所涉法規') !== false) {
+            if (self::withKeywords($text, self::$keywords) !== false) {
                 $b_dom = $b_tag;            
                 break;
             }
@@ -34,7 +34,7 @@ class RelatedLaws {
     {
         foreach ($dom->getElementsByTagName('p') as $p_tag) {
             $text = $p_tag->nodeValue;
-            if (mb_strpos($text, '所涉法規') !== false) {
+            if (self::withKeywords($text, self::$keywords) !== false) {
                 $p_dom = $p_tag;            
                 break;
             }
@@ -50,7 +50,7 @@ class RelatedLaws {
     {
         foreach ($dom->getElementsByTagName('h1') as $h1_tag) {
             $text = $h1_tag->nodeValue;
-            if (mb_strpos($text, '所涉法規') !== false) {
+            if (self::withKeywords($text, self::$keywords) !== false) {
                 $h1_dom = $h1_tag;            
                 break;
             }
@@ -61,4 +61,19 @@ class RelatedLaws {
         $p_dom = $h1_dom->nextSibling->nextSibling;
         return trim($p_dom->nodeValue);
     }
+
+    private static function withKeywords($text, $keywords)
+    {
+        foreach ($keywords as $keyword) {
+            if (mb_strpos($text, $keyword) !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static $keywords = [
+        '所涉法規',
+        '所涉法律',
+    ];
 }
