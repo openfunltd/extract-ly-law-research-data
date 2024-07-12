@@ -4,10 +4,9 @@ class RelatedLaws {
 
     public static function getRelatedLaws($filename)
     {
-        $content_type = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">';
         $html = file_get_contents("html/$filename");
         $dom = new DOMDocument();
-        @$dom->loadHTML($content_type . $html);
+        @$dom->loadHTML(self::$content_type . $html);
         $laws_str_001 = self::getByPattern001($dom);
         $laws_str_002 = self::getByPattern002($dom);
         $laws_str_003 = self::getByPattern003($dom);
@@ -27,7 +26,11 @@ class RelatedLaws {
             return '';
         }
         $p_dom = $b_dom->parentNode->nextSibling->nextSibling;
-        return trim($p_dom->nodeValue);
+        $str = trim($p_dom->nodeValue);
+        if (self::withKeywords($str, self::$excluded_keywords)) {
+            return '';
+        }
+        return $str;
     }
 
     private static function getByPattern002($dom)
@@ -43,7 +46,11 @@ class RelatedLaws {
             return '';
         }
         $p_dom = $p_dom->nextSibling->nextSibling;
-        return trim($p_dom->nodeValue);
+        $str = trim($p_dom->nodeValue);
+        if (self::withKeywords($str, self::$excluded_keywords)) {
+            return '';
+        }
+        return $str;
     }
 
     private static function getByPattern003($dom)
@@ -59,7 +66,11 @@ class RelatedLaws {
             return '';
         }
         $p_dom = $h1_dom->nextSibling->nextSibling;
-        return trim($p_dom->nodeValue);
+        $str = trim($p_dom->nodeValue);
+        if (self::withKeywords($str, self::$excluded_keywords)) {
+            return '';
+        }
+        return $str;
     }
 
     private static function withKeywords($text, $keywords)
@@ -72,8 +83,14 @@ class RelatedLaws {
         return false;
     }
 
+    private static $content_type = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">';
     private static $keywords = [
         '所涉法規',
         '所涉法律',
+    ];
+
+    private static $excluded_keywords = [
+        '背景說明',
+        '探討研析',
     ];
 }
