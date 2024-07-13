@@ -7,6 +7,27 @@ class RelatedLaws {
         $html = file_get_contents("html/$filename");
         $dom = new DOMDocument();
         @$dom->loadHTML(self::$content_type . $html);
+        $str = self::getByPattern001($dom);
+        if ($str != '') {
+            return $str;
+        }
+        $str = self::getByPattern002($dom);
+        if ($str != '') {
+            return $str;
+        }
+        $str = self::getByPattern003($dom);
+        if ($str != '') {
+            return $str;
+        }
+        $str = self::getByPattern004($dom);
+        return $str;
+    }
+
+    public static function getAllPatternResults($filename)
+    {
+        $html = file_get_contents("html/$filename");
+        $dom = new DOMDocument();
+        @$dom->loadHTML(self::$content_type . $html);
         $laws_str_001 = self::getByPattern001($dom);
         $laws_str_002 = self::getByPattern002($dom);
         $laws_str_003 = self::getByPattern003($dom);
@@ -31,6 +52,7 @@ class RelatedLaws {
         if (self::withKeywords($str, self::$excluded_keywords)) {
             return '';
         }
+        $str = self::removeRef($str);
         return $str;
     }
 
@@ -51,6 +73,7 @@ class RelatedLaws {
         if (self::withKeywords($str, self::$excluded_keywords)) {
             return '';
         }
+        $str = self::removeRef($str);
         return $str;
     }
 
@@ -71,6 +94,7 @@ class RelatedLaws {
         if (self::withKeywords($str, self::$excluded_keywords)) {
             return '';
         }
+        $str = self::removeRef($str);
         return $str;
     }
 
@@ -95,7 +119,8 @@ class RelatedLaws {
             if (count($str_array) < 2) {
                 return '';
             }
-            return trim($str_array[1]);
+            $str = self::removeRef($str_array[1]);
+            return trim($str);
         }
         return '';
     }
@@ -108,6 +133,12 @@ class RelatedLaws {
             }
         }
         return false;
+    }
+
+    private static function removeRef($text)
+    {
+        $text = preg_replace('/\[[^\]]*\]/', '', $text);
+        return trim($text);
     }
 
     private static $content_type = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">';

@@ -7,12 +7,13 @@ Initialer::initalizeProject(); //建立資料夾 doc/ html/ csv/
 $files = array_slice(scandir('html/'), 2);
 
 $rows = [];
-$rows[] = ['research_no', 'pattern001', 'pattern002', 'pattern003', 'pattern004'];
+$rows[] = ['research_no', 'answer', 'pattern001', 'pattern002', 'pattern003', 'pattern004'];
 foreach ($files as $filename) {
-    $results = RelatedLaws::getRelatedLaws($filename);
+    $answer = RelatedLaws::getRelatedLaws($filename);
+    $results = RelatedLaws::getAllPatternResults($filename);
     $dot_idx = strpos($filename, '.');
     $research_no = substr($filename, 0, $dot_idx);
-    $row = [$research_no, ...$results];
+    $row = [$research_no, $answer, ...$results];
     $rows[] = $row;
 }
 
