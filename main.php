@@ -2,22 +2,35 @@
 include 'src/Downloader.inc.php';
 include 'src/Initialer.inc.php';
 include 'src/RelatedLaws.inc.php';
+$doc_base = 'doc/';
 
 Initialer::initalizeProject(); //建立資料夾 doc/ html/ csv/
 
 $reports = Downloader::queryAPI();
+
+// packing csv fields
 $rows = [];
-$rows[] = ['research_no', 'title', 'published_date', 'authors', 'file_path'];
+$headers = ['research_no', 'title', 'published_date', 'authors', 'file_path'];
 foreach ($reports as $research) {
     $row = [];
-    $row[] = trim($research->{'@LawReportNo'});
-    $row[] = trim($research->Title);
-    $row[] = substr($research->{'@CompletionDate'}, 0, 10);
-    $row[] = trim($research->{'@Author'});
-    $row[] = trim($research->FilePath);
-    $rows[] = $row;
+    $research_no = trim($research->{'@LawReportNo'});
+    $row['research_no'] = $research_no;
+    $row['title'] = trim($research->Title);
+    $row['published_date'] = substr($research->{'@CompletionDate'}, 0, 10);
+    $row['authors'] = trim($research->{'@Author'});
+    $row['file_path'] = trim($research->FilePath);
+    $rows[$research_no] = $row;
 }
-var_dump($rows);
+
+// downlaod original files
+foreach ($rows as $row) {
+    $file_path = $row['file_path'];
+    $dot_idx = strrpos($file_path, '.');
+    $file_extension = mb_substr($file_path, $dot_idx);
+    $save_file_at = $doc_base . $row['research_no'] . $file_extension;
+    echo $save_file_at . "\n";
+    file_put_contents($save_file_at, file_get_contents($file_path));
+}
 
 /*
 $files = array_slice(scandir('html/'), 2);
