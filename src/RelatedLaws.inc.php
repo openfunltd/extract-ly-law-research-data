@@ -48,11 +48,12 @@ class RelatedLaws {
             return '';
         }
         $p_dom = $b_dom->parentNode->nextSibling->nextSibling;
-        $str = trim($p_dom->nodeValue);
+        $str = $p_dom->nodeValue;
         if (self::withKeywords($str, self::$excluded_keywords)) {
             return '';
         }
         $str = self::removeRef($str);
+        $str = self::superTrim($str);
         return $str;
     }
 
@@ -69,11 +70,12 @@ class RelatedLaws {
             return '';
         }
         $p_dom = $p_dom->nextSibling->nextSibling;
-        $str = trim($p_dom->nodeValue);
+        $str = $p_dom->nodeValue;
         if (self::withKeywords($str, self::$excluded_keywords)) {
             return '';
         }
         $str = self::removeRef($str);
+        $str = self::superTrim($str);
         return $str;
     }
 
@@ -90,11 +92,12 @@ class RelatedLaws {
             return '';
         }
         $p_dom = $h1_dom->nextSibling->nextSibling;
-        $str = trim($p_dom->nodeValue);
+        $str = $p_dom->nodeValue;
         if (self::withKeywords($str, self::$excluded_keywords)) {
             return '';
         }
         $str = self::removeRef($str);
+        $str = self::superTrim($str);
         return $str;
     }
 
@@ -111,7 +114,7 @@ class RelatedLaws {
             return '';
         }
         $sibling_p_dom = $p_dom->nextSibling->nextSibling;
-        $sibling_p_str = trim($sibling_p_dom->nodeValue);
+        $sibling_p_str = $sibling_p_dom->nodeValue;
         if (self::withKeywords($sibling_p_str, self::$excluded_keywords)) {
             $str = $p_dom->nodeValue;
             $str = preg_replace('/：/', ':', $str);
@@ -120,7 +123,8 @@ class RelatedLaws {
                 return '';
             }
             $str = self::removeRef($str_array[1]);
-            return trim($str);
+            $str = self::superTrim($str);
+            return $str;
         }
         return '';
     }
@@ -137,8 +141,12 @@ class RelatedLaws {
 
     private static function removeRef($text)
     {
-        $text = preg_replace('/\[[^\]]*\]/', '', $text);
-        return trim($text);
+        return preg_replace('/\[[^\]]*\]/', '', $text);
+    }
+
+    private static function superTrim($text)
+    {
+        return mb_ereg_replace('^\s+|\s+$', '', $text);
     }
 
     private static $content_type = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">';
