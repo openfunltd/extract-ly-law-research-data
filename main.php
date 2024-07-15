@@ -1,7 +1,8 @@
 <?php
 include 'src/Config.inc.php';
-include 'src/Downloader.inc.php';
 include 'src/Initialer.inc.php';
+include 'src/Util.inc.php';
+include 'src/Downloader.inc.php';
 include 'src/RelatedLaws.inc.php';
 $doc_base = 'doc/';
 $html_base = 'html/';
@@ -43,6 +44,12 @@ foreach ($rows as $row) {
     $TIKA_URL = Config::get('TIKA_URL');
     $command = sprintf("curl --silent -T %s %s -H 'Accept: text/html' --output %s", $save_file_at, $TIKA_URL, $save_html_at);
     exec($command);
+}
+
+//packing extracted document content into csv
+foreach ($rows as $row) {
+    $html_file_at = $html_base . $research_no . '.html';
+    $dom = Util::getDom($html_file_at);
 }
 
 /*
