@@ -2,3 +2,4 @@ doc
 html
 csv
 .DS_Store
+src/Config.inc.php

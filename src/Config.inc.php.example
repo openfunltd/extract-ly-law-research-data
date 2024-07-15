@@ -1,0 +1,17 @@
+<?php
+
+class Config {
+    // set config variables in this array
+    private static $configs = [
+        'TIKA_URL' => '',
+    ];    
+
+    public static function get($config_name)
+    {
+        $configs = self::$configs;
+        if (array_key_exists($config_name, $configs)) {
+            return $configs[$config_name];
+        }
+        return null;
+    }
+}

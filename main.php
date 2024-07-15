@@ -1,8 +1,10 @@
 <?php
+include 'src/Config.inc.php';
 include 'src/Downloader.inc.php';
 include 'src/Initialer.inc.php';
 include 'src/RelatedLaws.inc.php';
 $doc_base = 'doc/';
+$html_base = 'html/';
 
 Initialer::initalizeProject(); //建立資料夾 doc/ html/ csv/
 
@@ -12,7 +14,7 @@ if (count($reports) == 0) {
     exit;
 }
 
-// packing csv fields
+// packing research metadata into csv fields
 $rows = [];
 $headers = ['research_no', 'title', 'published_date', 'authors', 'file_path'];
 foreach ($reports as $research) {
@@ -26,14 +28,21 @@ foreach ($reports as $research) {
     $rows[$research_no] = $row;
 }
 
-// downlaod original files
+// downlaod original files and convert files into html via tika
 foreach ($rows as $row) {
+    //donwload original files
+    $research_no = $row['research_no'];
     $file_path = $row['file_path'];
     $dot_idx = strrpos($file_path, '.');
     $file_extension = mb_substr($file_path, $dot_idx);
-    $save_file_at = $doc_base . $row['research_no'] . $file_extension;
-    echo $save_file_at . "\n";
+    $save_file_at = $doc_base . $research_no . $file_extension;
     file_put_contents($save_file_at, file_get_contents($file_path));
+
+    //convert file html via tika
+    $save_html_at = $html_base . $research_no . '.html';
+    $TIKA_URL = Config::get('TIKA_URL');
+    $command = sprintf("curl -T ../doc/%s %s -H 'Accept: text/html' --output ../tika/%s", $filename, $TIKA_URL, $txt);
+    exec($command);
 }
 
 /*
