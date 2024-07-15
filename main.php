@@ -3,6 +3,7 @@ include 'src/Config.inc.php';
 include 'src/Initialer.inc.php';
 include 'src/Util.inc.php';
 include 'src/Downloader.inc.php';
+include 'src/Authors.inc.php';
 include 'src/RelatedLaws.inc.php';
 $doc_base = 'doc/';
 $html_base = 'html/';
@@ -24,7 +25,7 @@ foreach ($reports as $research) {
     $row['research_no'] = $research_no;
     $row['title'] = trim($research->Title);
     $row['related_laws'] = null;
-    $row['authors'] = trim($research->{'@Author'});
+    $row['authors'] = Authors::repack(trim($research->{'@Author'}));
     $row['published_date'] = substr($research->{'@CompletionDate'}, 0, 10);
     $row['content'] = null;
     $row['doc_url'] = trim($research->FilePath);

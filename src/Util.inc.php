@@ -8,5 +8,10 @@ class Util {
         return $dom;
     }
 
+    private static function superTrim($text)
+    {
+        return mb_ereg_replace('^\s+|\s+$', '', $text);
+    }
+
     private static $content_type = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">';
 }
