@@ -151,13 +151,31 @@ class RelatedLaws {
         } else if (mb_strpos($laws_str, '、') !== false) {
             $laws = explode('、', $laws_str);
         } else {
-            return self::superTrim($laws_str);
+            $laws_str = self::removeVerbose($laws_str);
+            $laws_str = self::superTrim($laws_str);
+            return $laws_str;
         }
         foreach ($laws as &$law) {
+            $law = self::removeVerbose($law);
             $law = self::superTrim($law);
         }
         return implode(';', $laws);
     }
+
+    private static function removeVerbose($text)
+    {
+        if (self::superTrim($text) == '無') {
+            return '';
+        }
+        if (preg_match('/[a-zA-Z]/', $text) === 0) {
+            $text = preg_replace('/\s+/', '', $text);
+        }
+        foreach (self::$verbose_regexs as $verbose_text) {
+            $text = preg_replace('/' . $verbose_text . '/', '', $text);
+        }
+        return $text;
+    }
+
 
     private static $keywords = [
         '所涉法規',
@@ -167,5 +185,17 @@ class RelatedLaws {
     private static $excluded_keywords = [
         '背景說明',
         '探討研析',
+    ];
+
+    private static $verbose_regexs = [
+        '。',
+        '（草案預告中）',
+        '\(草案預告中\)',
+        '（行政院研擬中）',
+        '\(行政院研擬中\)',
+        '（下稱.*?）',
+        '\(下稱.*?\)',
+        '（簡稱.*?）',
+        '\(簡稱.*?\)',
     ];
 }
