@@ -29,9 +29,8 @@ foreach ($reports as $research) {
     $rows[$research_no] = $row;
 }
 
-// downlaod original files and convert files into html via tika
 foreach ($rows as $row) {
-    //donwload original files
+    // donwload original files
     $research_no = $row['research_no'];
     $file_path = $row['file_path'];
     $dot_idx = strrpos($file_path, '.');
@@ -39,17 +38,20 @@ foreach ($rows as $row) {
     $save_file_at = $doc_base . $research_no . $file_extension;
     file_put_contents($save_file_at, file_get_contents($file_path));
 
-    //convert file html via tika
+    // convert file html via tika
     $save_html_at = $html_base . $research_no . '.html';
     $TIKA_URL = Config::get('TIKA_URL');
     $command = sprintf("curl --silent -T %s %s -H 'Accept: text/html' --output %s", $save_file_at, $TIKA_URL, $save_html_at);
     exec($command);
 }
 
-//packing extracted document content into csv
+// packing extracted document content into csv
 foreach ($rows as $row) {
-    $html_file_at = $html_base . $research_no . '.html';
+    $html_file_at = $html_base . $row['research_no'] . '.html';
+    echo $html_file_at . "\n";
     $dom = Util::getDom($html_file_at);
+    $related_laws_str = RelatedLaws::getRelatedLaws($dom);
+    echo $related_laws_str . "\n";
 }
 
 /*

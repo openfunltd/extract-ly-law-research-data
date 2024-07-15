@@ -2,11 +2,8 @@
 
 class RelatedLaws {
 
-    public static function getRelatedLaws($filename)
+    public static function getRelatedLaws($dom)
     {
-        $html = file_get_contents("html/$filename");
-        $dom = new DOMDocument();
-        @$dom->loadHTML(self::$content_type . $html);
         $str = self::getByPattern001($dom);
         if ($str != '') {
             return $str;
@@ -23,11 +20,8 @@ class RelatedLaws {
         return $str;
     }
 
-    public static function getAllPatternResults($filename)
+    public static function getAllPatternResults($dom)
     {
-        $html = file_get_contents("html/$filename");
-        $dom = new DOMDocument();
-        @$dom->loadHTML(self::$content_type . $html);
         $laws_str_001 = self::getByPattern001($dom);
         $laws_str_002 = self::getByPattern002($dom);
         $laws_str_003 = self::getByPattern003($dom);
@@ -149,7 +143,6 @@ class RelatedLaws {
         return mb_ereg_replace('^\s+|\s+$', '', $text);
     }
 
-    private static $content_type = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">';
     private static $keywords = [
         '所涉法規',
         '所涉法律',
