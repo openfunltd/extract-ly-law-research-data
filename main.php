@@ -17,26 +17,28 @@ if (count($reports) == 0) {
 
 // packing research metadata into csv fields
 $rows = [];
-$headers = ['research_no', 'title', 'published_date', 'authors', 'file_path'];
+$headers = ['research_no', 'title', 'published_date', 'authors', 'doc_url'];
 foreach ($reports as $research) {
     $row = [];
     $research_no = trim($research->{'@LawReportNo'});
     $row['research_no'] = $research_no;
     $row['title'] = trim($research->Title);
-    $row['published_date'] = substr($research->{'@CompletionDate'}, 0, 10);
+    $row['related_laws'] = null;
     $row['authors'] = trim($research->{'@Author'});
-    $row['file_path'] = trim($research->FilePath);
+    $row['published_date'] = substr($research->{'@CompletionDate'}, 0, 10);
+    $row['content'] = null;
+    $row['doc_url'] = trim($research->FilePath);
     $rows[$research_no] = $row;
 }
 
 foreach ($rows as $row) {
     // donwload original files
     $research_no = $row['research_no'];
-    $file_path = $row['file_path'];
-    $dot_idx = strrpos($file_path, '.');
-    $file_extension = mb_substr($file_path, $dot_idx);
+    $doc_url = $row['doc_url'];
+    $dot_idx = strrpos($doc_url, '.');
+    $file_extension = mb_substr($doc_url, $dot_idx);
     $save_file_at = $doc_base . $research_no . $file_extension;
-    file_put_contents($save_file_at, file_get_contents($file_path));
+    file_put_contents($save_file_at, file_get_contents($doc_url));
 
     // convert file html via tika
     $save_html_at = $html_base . $research_no . '.html';
@@ -51,5 +53,5 @@ foreach ($rows as $row) {
     echo $html_file_at . "\n";
     $dom = Util::getDom($html_file_at);
     $related_laws_str = RelatedLaws::getRelatedLaws($dom);
-    echo $related_laws_str . "\n";
+    $row['related_laws'] = $related_laws_str;
 }
