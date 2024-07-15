@@ -41,7 +41,7 @@ foreach ($rows as $row) {
     //convert file html via tika
     $save_html_at = $html_base . $research_no . '.html';
     $TIKA_URL = Config::get('TIKA_URL');
-    $command = sprintf("curl -T ../doc/%s %s -H 'Accept: text/html' --output ../tika/%s", $filename, $TIKA_URL, $txt);
+    $command = sprintf("curl --silent -T %s %s -H 'Accept: text/html' --output %s", $save_file_at, $TIKA_URL, $save_html_at);
     exec($command);
 }
 
