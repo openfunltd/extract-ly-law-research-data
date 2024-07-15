@@ -47,7 +47,7 @@ class RelatedLaws {
             return '';
         }
         $str = self::removeRef($str);
-        $str = self::superTrim($str);
+        $str = self::repackLaws($str);
         return $str;
     }
 
@@ -69,7 +69,7 @@ class RelatedLaws {
             return '';
         }
         $str = self::removeRef($str);
-        $str = self::superTrim($str);
+        $str = self::repackLaws($str);
         return $str;
     }
 
@@ -91,7 +91,7 @@ class RelatedLaws {
             return '';
         }
         $str = self::removeRef($str);
-        $str = self::superTrim($str);
+        $str = self::repackLaws($str);
         return $str;
     }
 
@@ -117,7 +117,7 @@ class RelatedLaws {
                 return '';
             }
             $str = self::removeRef($str_array[1]);
-            $str = self::superTrim($str);
+            $str = self::repackLaws($str);
             return $str;
         }
         return '';
@@ -141,6 +141,22 @@ class RelatedLaws {
     private static function superTrim($text)
     {
         return mb_ereg_replace('^\s+|\s+$', '', $text);
+    }
+
+    private static function repackLaws($laws_str)
+    {
+        if (mb_strpos($laws_str, '《') !== false) {
+            preg_match_all('/《(.*?)》/u', $laws_str, $laws);
+            $laws = $laws[1];
+        } else if (mb_strpos($laws_str, '、') !== false) {
+            $laws = explode('、', $laws_str);
+        } else {
+            return self::superTrim($laws_str);
+        }
+        foreach ($laws as &$law) {
+            $law = self::superTrim($law);
+        }
+        return implode(';', $laws);
     }
 
     private static $keywords = [
