@@ -7,6 +7,10 @@ $doc_base = 'doc/';
 Initialer::initalizeProject(); //建立資料夾 doc/ html/ csv/
 
 $reports = Downloader::queryAPI();
+if (count($reports) == 0) {
+    echo "Program end with no new research.";
+    exit;
+}
 
 // packing csv fields
 $rows = [];
