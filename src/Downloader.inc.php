@@ -7,12 +7,7 @@ class Downloader {
         $date = date('md',strtotime('-1 days'));
         $date = $yearROC . $date;
 
-        //TODO to be removed
-        $date = '1130714';
-        $date2 = '1050301';
-
-        $query = sprintf('https://www.ly.gov.tw/WebAPI/LawBureauResearch.aspx?type=議題研析&from=%s&to=%s&mode=json', $date2, $date);
-        echo $query . "\n";
+        $query = sprintf('https://www.ly.gov.tw/WebAPI/LawBureauResearch.aspx?type=議題研析&from=%s&to=%s&mode=json', $date, $date);
         $res = file_get_contents($query);
 
         if (trim($res) == '{}') {
