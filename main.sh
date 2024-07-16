@@ -9,9 +9,11 @@ if test -f "csv/new.csv"; then
     cat new.csv old.csv > merged.csv
     cat header.csv merged.csv > research.csv
     mv merged.csv old.csv
-    mv research.csv ../taiwan-ly-law-research/research.csv
+    mv research.csv ../../taiwan-ly-law-research/research.csv
+    cd ..
     mv html/* ../taiwan-ly-law-research/html/
     cd ../taiwan-ly-law-research
     git add --all
     git commit -m "Daily update by cronjob"
+    git push
 fi
