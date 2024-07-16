@@ -6,8 +6,9 @@ php main.php
 if test -f "csv/new.csv"; then
     cd csv
     cp old.csv veryold.csv
-    cat new.csv old.csv > old.csv
-    cat header.csv old.csv > research.csv
+    cat new.csv old.csv > merged.csv
+    cat header.csv merged.csv > research.csv
+    mv merged.csv old.csv
     mv research.csv ../taiwan-ly-law-research/research.csv
     mv html/* ../taiwan-ly-law-research/html/
     cd ../taiwan-ly-law-research
