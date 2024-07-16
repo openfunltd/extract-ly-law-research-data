@@ -10,7 +10,9 @@ $doc_base = 'doc/';
 $html_base = 'html/';
 
 Initialer::initalizeProject(); //建立資料夾
-unlink('csv/new.csv');
+if (file_exists('csv/new.csv')) {
+    unlink('csv/new.csv');
+}
 
 $reports = Downloader::queryAPI();
 if (count($reports) == 0) {
