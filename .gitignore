@@ -1,5 +1,8 @@
+.DS_Store
+
+csv/*
+!csv/headers.csv
+
 doc
 html
-csv
-.DS_Store
 src/Config.inc.php
