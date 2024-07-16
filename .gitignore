@@ -3,6 +3,7 @@
 csv/*
 !csv/header.csv
 
+log
 doc
 html
 src/Config.inc.php

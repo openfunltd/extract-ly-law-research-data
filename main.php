@@ -9,7 +9,7 @@ include 'src/Content.inc.php';
 $doc_base = 'doc/';
 $html_base = 'html/';
 
-Initialer::initalizeProject(); //建立資料夾 doc/ html/ csv/
+Initialer::initalizeProject(); //建立資料夾
 unlink('csv/new.csv');
 
 $reports = Downloader::queryAPI();

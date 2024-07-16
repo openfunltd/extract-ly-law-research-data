@@ -11,5 +11,8 @@ class Initialer {
         if (! file_exists('csv')) {
             mkdir('csv');
         }
+        if (! file_exists('csv')) {
+            mkdir('log');
+        }
     }
 }
