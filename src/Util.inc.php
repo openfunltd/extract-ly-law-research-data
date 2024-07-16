@@ -8,7 +8,7 @@ class Util {
         return $dom;
     }
 
-    private static function superTrim($text)
+    public static function superTrim($text)
     {
         return mb_ereg_replace('^\s+|\s+$', '', $text);
     }

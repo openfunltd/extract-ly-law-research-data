@@ -5,6 +5,7 @@ include 'src/Util.inc.php';
 include 'src/Downloader.inc.php';
 include 'src/Authors.inc.php';
 include 'src/RelatedLaws.inc.php';
+include 'src/Content.inc.php';
 $doc_base = 'doc/';
 $html_base = 'html/';
 
@@ -33,9 +34,14 @@ foreach ($reports as $research) {
 }
 
 foreach ($rows as $row) {
+    // skip row without doc_url
+    $doc_url = $row['doc_url'];
+    if (is_null($doc_url)) {
+        continue;
+    }
+
     // donwload original files
     $research_no = $row['research_no'];
-    $doc_url = $row['doc_url'];
     $dot_idx = strrpos($doc_url, '.');
     $file_extension = mb_substr($doc_url, $dot_idx);
     $save_file_at = $doc_base . $research_no . $file_extension;
@@ -50,9 +56,16 @@ foreach ($rows as $row) {
 
 // packing extracted document content into csv
 foreach ($rows as $row) {
+    // skip row without doc_url
+    $doc_url = $row['doc_url'];
+    if (is_null($doc_url)) {
+        continue;
+    }
+
+    // extract data in document
     $html_file_at = $html_base . $row['research_no'] . '.html';
-    echo $html_file_at . "\n";
     $dom = Util::getDom($html_file_at);
     $related_laws_str = RelatedLaws::getRelatedLaws($dom);
     $row['related_laws'] = $related_laws_str;
+    $row['content'] = Content::getFullText($dom);
 }
