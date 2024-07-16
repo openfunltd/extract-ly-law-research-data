@@ -10,10 +10,11 @@ $doc_base = 'doc/';
 $html_base = 'html/';
 
 Initialer::initalizeProject(); //建立資料夾 doc/ html/ csv/
+unlink('csv/new.csv');
 
 $reports = Downloader::queryAPI();
 if (count($reports) == 0) {
-    echo "Program end with no new research.";
+    echo "Program end with no new research." . "\n";
     exit;
 }
 
