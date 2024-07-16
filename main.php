@@ -75,7 +75,7 @@ foreach ($rows as &$row) {
 
 
 // write csv
-$file = fopen('csv/research_list.csv', 'w');
+$file = fopen('csv/new.csv', 'w');
 foreach ($rows as $data) {
     fputcsv($file, $data);
 }
