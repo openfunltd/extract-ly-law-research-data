@@ -1,7 +1,7 @@
 .DS_Store
 
 csv/*
-!csv/headers.csv
+!csv/header.csv
 
 doc
 html
