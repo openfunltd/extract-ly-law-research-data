@@ -19,7 +19,6 @@ if (count($reports) == 0) {
 
 // packing research metadata into csv fields
 $rows = [];
-$headers = ['research_no', 'title', 'published_date', 'authors', 'doc_url'];
 foreach ($reports as $research) {
     $row = [];
     $research_no = trim($research->{'@LawReportNo'});
@@ -55,7 +54,7 @@ foreach ($rows as $row) {
 }
 
 // packing extracted document content into csv
-foreach ($rows as $row) {
+foreach ($rows as &$row) {
     // skip row without doc_url
     $doc_url = $row['doc_url'];
     if (is_null($doc_url)) {
@@ -69,3 +68,11 @@ foreach ($rows as $row) {
     $row['related_laws'] = $related_laws_str;
     $row['content'] = Content::getFullText($dom);
 }
+
+
+// write csv
+$file = fopen('csv/research_list.csv', 'w');
+foreach ($rows as $data) {
+    fputcsv($file, $data);
+}
+fclose($file);
