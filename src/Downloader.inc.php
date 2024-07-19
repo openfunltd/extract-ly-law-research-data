@@ -2,9 +2,9 @@
 
 class Downloader {
     public static function queryAPI() {
-        $year = date('Y', strtotime('-1 days'));
+        $year = date('Y', strtotime('-2 days'));
         $yearROC = $year - 1911;
-        $date = date('md',strtotime('-1 days'));
+        $date = date('md',strtotime('-2 days'));
         $date = $yearROC . $date;
 
         $query = sprintf('https://www.ly.gov.tw/WebAPI/LawBureauResearch.aspx?type=議題研析&from=%s&to=%s&mode=json', $date, $date);
