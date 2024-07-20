@@ -27,6 +27,12 @@ class Downloader {
         $uniqueArray = [];
         $usedLawReportNos = [];
 
+        //如果只有一個結果 API 會沒有把它包進 array 裡頭，導致只有一個結果跟多個結果的 json 結構不一樣需要額外處理
+        if (property_exists($reports, 'Title')) {
+            $uniqueArray[] = $reports;
+            return $uniqueArray;
+        }
+
         foreach ($reports as $research) {
             $lawReportNo = $research->{'@LawReportNo'};
             if (!in_array($lawReportNo, $usedLawReportNos)) {
